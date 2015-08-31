@@ -6,11 +6,11 @@
  * sw10.js is released under the MIT License.
  * modified and compiled with Closure Compiler by Jonathan Duncan
  */
-var sw10 = signwriting_2010 = (function () {
+var signwriting_2010 = (function() {
     /**
      * @param {boolean=} style Some value (optional).
      */
-    var key = function (text, style) {
+    var key = function(text, style) {
         var keyvar = text.match(/S[123][0-9a-f]{2}[0-5][0-9a-f]([0-9]{3}x[0-9]{3})?/g);
         if (!keyvar) {
             return '';
@@ -21,7 +21,8 @@ var sw10 = signwriting_2010 = (function () {
     /**
      * @param {boolean=} style Some value (optional).
      */
-    var fsw = function (text, style) {
+    /** @nocollapse */
+    var fsw = function(text, style) {
         var fswvar = text.match(/(A(S[123][0-9a-f]{2}[0-5][0-9a-f])+)?[BLMR]([0-9]{3}x[0-9]{3})(S[123][0-9a-f]{2}[0-5][0-9a-f][0-9]{3}x[0-9]{3})*|S38[7-9ab][0-5][0-9a-f][0-9]{3}x[0-9]{3}/);
         if (!fswvar) {
             return '';
@@ -29,7 +30,7 @@ var sw10 = signwriting_2010 = (function () {
             return fswvar[0] + (style ? styling(text) : '');
         }
     };
-    var styling = function (text) {
+    var styling = function(text) {
         var sfsw = text.match(/-C?(P[0-9]{2})?(G\(([0-9a-fA-F]{3}([0-9a-fA-F]{3})?|[a-zA-Z]+)\))?(D\(([0-9a-fA-F]{3}([0-9a-fA-F]{3})?|[a-zA-Z]+)(,([0-9a-fA-F]{3}([0-9a-fA-F]{3})?|[a-zA-Z]+))?\))?(Z[0-9]+(\.[0-9]+)?)?(\+(D[0-9]{2}\(([0-9a-fA-F]{3}([0-9a-fA-F]{3})?|[a-zA-Z]+)(,([0-9a-fA-F]{3}([0-9a-fA-F]{3})?|[a-zA-Z]+))?\))*(Z[0-9]{2},[0-9]+(\.[0-9]+)?(,[0-9]{3}x[0-9]{3})?)*)?/);
         if (!sfsw) {
             return '';
@@ -37,7 +38,7 @@ var sw10 = signwriting_2010 = (function () {
             return sfsw[0];
         }
     };
-    var mirror = function (keyvar) {
+    var mirror = function(keyvar) {
         keyvar = key(keyvar);
         if (!size(keyvar)) {
             return '';
@@ -77,7 +78,7 @@ var sw10 = signwriting_2010 = (function () {
         }
         return keyvar;
     };
-    var fill = function (keyvar, step) {
+    var fill = function(keyvar, step) {
         keyvar = key(keyvar);
         if (!size(keyvar)) {
             return '';
@@ -101,7 +102,7 @@ var sw10 = signwriting_2010 = (function () {
         }
         return keyvar;
     };
-    var rotate = function (keyvar, step) {
+    var rotate = function(keyvar, step) {
         keyvar = key(keyvar);
         if (!size(keyvar)) {
             return '';
@@ -136,7 +137,7 @@ var sw10 = signwriting_2010 = (function () {
         }
         return keyvar;
     };
-    var scroll = function (keyvar, step) {
+    var scroll = function(keyvar, step) {
         keyvar = key(keyvar);
         if (!size(keyvar)) {
             return '';
@@ -154,7 +155,7 @@ var sw10 = signwriting_2010 = (function () {
             return keyvar;
         }
     };
-    var structure = function (division, keyvar, opt) {
+    var structure = function(division, keyvar, opt) {
         var arrs = {
             kind: ['S100', 'S37f', 'S387'],
             category: ['S100', 'S205', 'S2f7', 'S2ff', 'S36d', 'S37f', 'S387'],
@@ -202,7 +203,7 @@ var sw10 = signwriting_2010 = (function () {
         index = index < 0 ? 0 : index >= arr.length ? arr.length - 1 : index;
         return arr[index];
     };
-    var type = function (typevar) {
+    var type = function(typevar) {
         var start, end;
         switch (typevar) {
             case "writing":
@@ -256,7 +257,7 @@ var sw10 = signwriting_2010 = (function () {
     /**
      * @param {string=} typevar Some value (optional).
      */
-    var is = function (keyvar, typevar) {
+    var is = function(keyvar, typevar) {
         if (keyvar.length === 6 && !size(keyvar)) {
             return false;
         }
@@ -269,7 +270,7 @@ var sw10 = signwriting_2010 = (function () {
     /**
      * @param {string=} typevar Some value (optional).
      */
-    var filter = function (fswvar, typevar) {
+    var filter = function(fswvar, typevar) {
         var rangevar = type(typevar);
         var start = rangevar[0];
         var end = rangevar[1];
@@ -281,7 +282,7 @@ var sw10 = signwriting_2010 = (function () {
             return '';
         }
     };
-    var random = function (typevar) {
+    var random = function(typevar) {
         var rangevar = type(typevar);
         var start = rangevar[0];
         var end = rangevar[1];
@@ -295,7 +296,7 @@ var sw10 = signwriting_2010 = (function () {
             return random(typevar);
         }
     };
-    var colorize = function (keyvar) {
+    var colorize = function(keyvar) {
         var color = '000000';
         if (is(keyvar, 'hand')) {
             color = '0000CC';
@@ -318,7 +319,7 @@ var sw10 = signwriting_2010 = (function () {
         }
         return color;
     };
-    var view = function (keyvar, fillone) {
+    var view = function(keyvar, fillone) {
         if (!is(keyvar)) {
             return '';
         }
@@ -332,7 +333,7 @@ var sw10 = signwriting_2010 = (function () {
     /**
      * @param {Object=} hexval Some value (optional).
      */
-    var code = function (text, hexval) {
+    var code = function(text, hexval) {
         var keyvar;
         var fswvar = fsw(text);
         if (fswvar) {
@@ -355,7 +356,7 @@ var sw10 = signwriting_2010 = (function () {
     /**
      * @param {Object=} hexval Some value (optional).
      */
-    var uni8 = function (text, hexval) {
+    var uni8 = function(text, hexval) {
         var keyvar;
         var fswvar = fsw(text);
         if (fswvar) {
@@ -389,7 +390,7 @@ var sw10 = signwriting_2010 = (function () {
     /**
      * @param {Object=} hexval Some value (optional).
      */
-    var pua = function (text, hexval) {
+    var pua = function(text, hexval) {
         var fswvar = fsw(text);
         if (fswvar) {
             var str, codevar, coord, keyvar1, puavar;
@@ -433,7 +434,7 @@ var sw10 = signwriting_2010 = (function () {
         puavar2 += hexval ? rotation.toString(16).toUpperCase() : String.fromCharCode(0xD800 + ((rotation - 0x10000) >> 10), 0xDC00 + ((rotation - 0x10000) & 0x3FF));
         return puavar2;
     };
-    var bbox = function (fswvar) {
+    var bbox = function(fswvar) {
         var rcoord = /[0-9]{3}x[0-9]{3}/g;
         var x, y, x1 = Number.MAX_VALUE,
             x2 = Number.MIN_VALUE,
@@ -462,7 +463,7 @@ var sw10 = signwriting_2010 = (function () {
             return '';
         }
     };
-    var displace = function (text, x, y) {
+    var displace = function(text, x, y) {
         var xpos, ypos;
         var re = '[0-9]{3}x[0-9]{3}';
         var matches = text.match(new RegExp(re, 'g'));
@@ -478,7 +479,7 @@ var sw10 = signwriting_2010 = (function () {
         return text;
     };
     var sizes = {};
-    var size = function (text) {
+    var size = function(text) {
         var sizevar, fswvar = fsw(text);
         if (fswvar) {
             var bboxvar = bbox(fswvar);
@@ -600,7 +601,7 @@ var sw10 = signwriting_2010 = (function () {
     /**
      * @param {string=} typevar Some value (optional).
      */
-    var max = function (fswvar, typevar) {
+    var max = function(fswvar, typevar) {
         var rangevar = type(typevar);
         var start = rangevar[0];
         var end = rangevar[1];
@@ -621,7 +622,7 @@ var sw10 = signwriting_2010 = (function () {
             return '';
         }
     };
-    var norm = function (fswvar) {
+    var norm = function(fswvar) {
         var minx, maxx, miny, maxy;
         var hbox = bbox(max(fswvar, 'hcenter'));
         var vbox = bbox(max(fswvar, 'vcenter'));
@@ -655,7 +656,7 @@ var sw10 = signwriting_2010 = (function () {
         fswvar = start + pInt(box.slice(4, 7)) + "x" + pInt(box.slice(12, 15)) + filter(fswvar);
         return displace(fswvar, xdiff, ydiff);
     };
-    var svg = function (text, options) {
+    var svg = function(text, options) {
         var fswvar = fsw(text);
         var stylingvar = styling(text);
         var keysize;
@@ -888,7 +889,7 @@ var sw10 = signwriting_2010 = (function () {
         }
         return svgvar;
     };
-    var canvas = function (text, options) {
+    var canvas = function(text, options) {
         var canvasvar = document.createElement("canvas");
         var fswvar = fsw(text, true);
         var stylingvar = styling(text);
@@ -1106,7 +1107,7 @@ var sw10 = signwriting_2010 = (function () {
         }
         return canvasvar;
     };
-    var png = function (fswvar, options) {
+    var png = function(fswvar, options) {
         if (fsw(fswvar, true) || key(fswvar, true)) {
             var canvasvar = canvas(fswvar, options);
             var pngvar = canvasvar.toDataURL("image/png");
@@ -1116,7 +1117,7 @@ var sw10 = signwriting_2010 = (function () {
             return '';
         }
     };
-    var query = function (queryvar) {
+    var query = function(queryvar) {
         queryvar = queryvar.match(/Q((A(S[123][0-9a-f]{2}[0-5u][0-9a-fu]|R[123][0-9a-f]{2}t[123][0-9a-f]{2})+)?T)?((R[123][0-9a-f]{2}t[123][0-9a-f]{2}([0-9]{3}x[0-9]{3})?)|(S[123][0-9a-f]{2}[0-5u][0-9a-fu]([0-9]{3}x[0-9]{3})?))*(V[0-9]+)?/);
         if (queryvar) {
             return queryvar[0];
@@ -1127,7 +1128,7 @@ var sw10 = signwriting_2010 = (function () {
     /**
      * @param {string=} hexvar Some value (optional).
      */
-    var range = function (min, maxvar, hexvar) {
+    var range = function(min, maxvar, hexvar) {
         var pattern, re, diff, tmax, cnt, minV, maxV;
         if (!hexvar) {
             hexvar = '';
@@ -1537,7 +1538,7 @@ var sw10 = signwriting_2010 = (function () {
     /**
      * @param {number=} fuzz Some value (optional).
      */
-    var regex = function (queryvar, fuzz) {
+    var regex = function(queryvar, fuzz) {
         queryvar = query(queryvar);
         if (!queryvar) {
             return '';
@@ -1688,7 +1689,7 @@ var sw10 = signwriting_2010 = (function () {
         }
         return segments;
     };
-    var results = function (queryvar, text, lane) {
+    var results = function(queryvar, text, lane) {
         if (!text) {
             return [];
         }
@@ -1718,7 +1719,7 @@ var sw10 = signwriting_2010 = (function () {
                 text = text.replace(/R/g, lane);
             }
             parts = text.split(' ');
-            words = parts.filter(function (element) {
+            words = parts.filter(function(element) {
                 return element in this ? false : this[element] = true;
             }, {});
         } else {
@@ -1726,7 +1727,7 @@ var sw10 = signwriting_2010 = (function () {
         }
         return words;
     };
-    var lines = function (queryvar, text, lane) {
+    var lines = function(queryvar, text, lane) {
         if (!text) {
             return [];
         }
@@ -1757,7 +1758,7 @@ var sw10 = signwriting_2010 = (function () {
                 text = text.replace(/R/g, lane);
             }
             parts = text.split("\n");
-            words = parts.filter(function (element) {
+            words = parts.filter(function(element) {
                 return element in this ? false : this[element] = true;
             }, {});
         } else {
@@ -1765,7 +1766,7 @@ var sw10 = signwriting_2010 = (function () {
         }
         return words;
     };
-    var convert = function (fswvar, flags) {
+    var convert = function(fswvar, flags) {
         // e - exact symbol in temporal prefix
         // g - general symbol in temporal prefix
         // E - exact symbol in spatial signbox
@@ -1824,43 +1825,144 @@ var sw10 = signwriting_2010 = (function () {
     /**
      * @param {number=} radix Some value (optional).
      */
-    var pInt = function (s, radix) {
+    var pInt = function(s, radix) {
         return parseInt(s, radix);
     };
+    /**
+ * A namespace.
+ * @const
+ */
     var publicApi = {};
-
+    /** @nocollapse */
     publicApi.key = key;
+    /** @nocollapse */
     publicApi.fsw = fsw;
+    /** @nocollapse */
     publicApi.styling = styling;
+    /** @nocollapse */
     publicApi.mirror = mirror;
+    /** @nocollapse */
     publicApi.fill = fill;
+    /** @nocollapse */
     publicApi.rotate = rotate;
+    /** @nocollapse */
     publicApi.scroll = scroll;
+    /** @nocollapse */
     publicApi.structure = structure;
+    /** @nocollapse */
     publicApi.type = type;
+    /** @nocollapse */
     publicApi.is = is;
+    /** @nocollapse */
     publicApi.filter = filter;
+    /** @nocollapse */
     publicApi.random = random;
+    /** @nocollapse */
     publicApi.colorize = colorize;
+    /** @nocollapse */
     publicApi.view = view;
+    /** @nocollapse */
     publicApi.svg = svg;
+    /** @nocollapse */
     publicApi.code = code;
+    /** @nocollapse */
     publicApi.uni8 = uni8;
+    /** @nocollapse */
     publicApi.pua = pua;
+    /** @nocollapse */
     publicApi.bbox = bbox;
+    /** @nocollapse */
     publicApi.displace = displace;
+    /** @nocollapse */
     publicApi.size = size;
+    /** @nocollapse */
     publicApi.max = max;
+    /** @nocollapse */
     publicApi.norm = norm;
+    /** @nocollapse */
     publicApi.canvas = canvas;
+    /** @nocollapse */
     publicApi.png = png;
+    /** @nocollapse */
     publicApi.query = query;
+    /** @nocollapse */
     publicApi.range = range;
+    /** @nocollapse */
     publicApi.regex = regex;
+    /** @nocollapse */
     publicApi.results = results;
+    /** @nocollapse */
     publicApi.lines = lines;
+    /** @nocollapse */
     publicApi.convert = convert;
 
 
     return publicApi;
 }());
+/**
+ * A namespace.
+ * @const
+ */
+var sw10 = {};
+sw10.key = signwriting_2010.key;
+/** @nocollapse */
+sw10.fsw = signwriting_2010.fsw;
+/** @nocollapse */
+sw10.styling = signwriting_2010.styling;
+/** @nocollapse */
+sw10.mirror = signwriting_2010.mirror;
+/** @nocollapse */
+sw10.fill = signwriting_2010.fill;
+/** @nocollapse */
+sw10.rotate = signwriting_2010.rotate;
+/** @nocollapse */
+sw10.scroll = signwriting_2010.scroll;
+/** @nocollapse */
+sw10.structure = signwriting_2010.structure;
+/** @nocollapse */
+sw10.type = signwriting_2010.type;
+/** @nocollapse */
+sw10.is = signwriting_2010.is;
+/** @nocollapse */
+sw10.filter = signwriting_2010.filter;
+/** @nocollapse */
+sw10.random = signwriting_2010.random;
+/** @nocollapse */
+sw10.colorize = signwriting_2010.colorize;
+/** @nocollapse */
+sw10.view = signwriting_2010.view;
+/** @nocollapse */
+sw10.svg = signwriting_2010.svg;
+/** @nocollapse */
+sw10.code = signwriting_2010.code;
+/** @nocollapse */
+sw10.uni8 = signwriting_2010.uni8;
+/** @nocollapse */
+sw10.pua = signwriting_2010.pua;
+/** @nocollapse */
+sw10.bbox = signwriting_2010.bbox;
+/** @nocollapse */
+sw10.displace = signwriting_2010.displace;
+/** @nocollapse */
+sw10.size = signwriting_2010.size;
+/** @nocollapse */
+sw10.max = signwriting_2010.max;
+/** @nocollapse */
+sw10.norm = signwriting_2010.norm;
+/** @nocollapse */
+sw10.canvas = signwriting_2010.canvas;
+/** @nocollapse */
+sw10.png = signwriting_2010.png;
+/** @nocollapse */
+sw10.query = signwriting_2010.query;
+/** @nocollapse */
+sw10.range = signwriting_2010.range;
+/** @nocollapse */
+sw10.regex = signwriting_2010.regex;
+/** @nocollapse */
+sw10.results = signwriting_2010.results;
+/** @nocollapse */
+sw10.lines = signwriting_2010.lines;
+/** @nocollapse */
+sw10.convert = signwriting_2010.convert;
+window["sw10"] = sw10;
