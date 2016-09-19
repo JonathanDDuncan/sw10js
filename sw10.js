@@ -1063,14 +1063,21 @@
                     var keysized = size(sym);
                     if (keysized) {
                         keysized = keysized.split('x');
+                        exsym.width = parseInt(keysized[0]);
+                        exsym.height = parseInt(keysized[1]);
                         x2 = Math.max(x2, pInt(x) + (options.F[i3 + 1][0] * pInt(keysized[0])));
                         y2 = Math.max(y2, pInt(y) + (options.F[i3 + 1][0] * pInt(keysized[1])));
                     }
 
                 }
                 exsym = new Object;
-                exsym.x =parseInt(x)  ;
+                exsym.x = parseInt(x);
                 exsym.y = parseInt(y);
+                var keysized1 = size(sym);
+               
+                keysized1 = keysized1.split('x');
+                exsym.width = parseInt(keysized1[0]);
+                exsym.height = parseInt(keysized1[1]);
 
                 gelem = '<g transform="translate(' + x + ',' + y + ')">';
                 gelem += '<text ';
