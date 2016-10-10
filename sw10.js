@@ -759,7 +759,250 @@ var sw10 = signwriting_2010 = {
     }
     return svg;
   },
-  canvas: function(text,options){
+  symbolsList: function (text, options) {
+      var fsw = this.fsw(text);
+      var styling = this.styling(text);
+      var keysize;
+      if (!fsw) {
+          var key = this.key(text);
+          var keysize = this.size(key);
+          if (!keysize) return '';
+          if (key.length == 6) {
+              fsw = key + "500x500";
+          } else {
+              fsw = key;
+          }
+      }
+      if (!options) options = {};
+      if (options.size) {
+          options.size = parseFloat(options.size) || 'x';
+      } else {
+          options.size = 1;
+      }
+      if (options.colorize) {
+          options.colorize = true;
+      } else {
+          options.colorize = false;
+      }
+      if (options.pad) {
+          options.pad = parseInt(options.pad);
+      } else {
+          options.pad = 0;
+      }
+      if (!options.line) {
+          options.line = "black";
+      } else {
+          options.line = /^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/g.test(options.line) ? "#" + options.line : options.line;
+      }
+      if (!options.fill) {
+          options.fill = "white";
+      } else {
+          options.fill = /^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/g.test(options.fill) ? "#" + options.fill : options.fill;
+      }
+      if (!options.back) {
+          options.back = "";
+      } else {
+          options.back = /^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/g.test(options.back) ? "#" + options.back : options.back;
+      }
+      options.E = [];
+      options.F = [];
+
+      options.view = options.view == "key" ? "key" : options.view == "uni8" ? "uni8" : options.view == "pua" ? "pua" : "code";
+      options.copy = options.copy == "code" ? "code" : options.copy == "uni8" ? "uni8" : options.copy == "pua" ? "pua" : "key";
+
+
+      if (styling) {
+          var rs;
+          rs = styling.match(/C/);
+          options.colorize = rs ? true : false;
+
+          rs = styling.match(/P[0-9]{2}/);
+          if (rs) {
+              options.pad = parseInt(rs[0].substring(1, rs[0].length));
+          }
+
+          rs = styling.match(/G\(([0-9a-fA-F]{3}([0-9a-fA-F]{3})?|[a-zA-Z]+)\)/);
+          if (rs) {
+              var back = rs[0].substring(2, rs[0].length - 1);
+              options.back = /^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/g.test(back) ? "#" + back : back;
+          }
+
+          stylings = styling.split('+');
+          rs = stylings[0].match(/D\(([0-9a-f]{3}([0-9a-f]{3})?|[a-zA-Z]+)(,([0-9a-f]{3}([0-9a-f]{3})?|[a-zA-Z]+))?\)/);
+          if (rs) {
+              var colors = rs[0].substring(2, rs[0].length - 1).split(',');
+              if (colors[0]) options.line = /^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/g.test(colors[0]) ? "#" + colors[0] : colors[0];
+              if (colors[1]) options.fill = /^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/g.test(colors[1]) ? "#" + colors[1] : colors[1];
+          }
+
+          rs = stylings[0].match(/Z[0-9]+(\.[0-9]+)?/);
+          if (rs) {
+              options.size = rs[0].substring(1, rs[0].length);
+          }
+
+          if (!stylings[1]) stylings[1] = '';
+
+          rs = stylings[1].match(/D[0-9]{2}\(([0-9a-f]{3}([0-9a-f]{3})?|[a-wyzA-Z]+)(,([0-9a-f]{3}([0-9a-f]{3})?|[a-wyzA-Z]+))?\)/g);
+          if (rs) {
+              for (var i = 0; i < rs.length; i++) {
+                  var pos = parseInt(rs[i].substring(1, 3));
+                  var colors = rs[i].substring(4, rs[i].length - 1).split(',');
+                  if (colors[0]) colors[0] = /^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/g.test(colors[0]) ? "#" + colors[0] : colors[0];
+                  if (colors[1]) colors[1] = /^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/g.test(colors[1]) ? "#" + colors[1] : colors[1];
+                  options.E[pos] = colors;
+              }
+          }
+
+          rs = stylings[1].match(/Z[0-9]{2},[0-9]+(\.[0-9]+)?(,[0-9]{3}x[0-9]{3})?/g);
+          if (rs) {
+              for (var i = 0; i < rs.length; i++) {
+                  var pos = parseInt(rs[i].substring(1, 3));
+                  var size = rs[i].substring(4, rs[i].length).split(',');
+                  size[0] = parseFloat(size[0]);
+                  options.F[pos] = size;
+              }
+          }
+      }
+
+      var r, rsym, rcoord, sym, syms, coords, gelem, o, exsyms, exsym;
+      r = /(A(S[123][0-9a-f]{2}[0-5][0-9a-f])+)?[BLMR]([0-9]{3}x[0-9]{3})(S[123][0-9a-f]{2}[0-5][0-9a-f][0-9]{3}x[0-9]{3})*|S38[7-9ab][0-5][0-9a-f][0-9]{3}x[0-9]{3}/g;
+      rsym = /S[123][0-9a-f]{2}[0-5][0-9a-f][0-9]{3}x[0-9]{3}/g;
+      rcoord = /[0-9]{3}x[0-9]{3}/g;
+      o = {};
+      o.L = -1;
+      o.R = 1;
+      var x, x1 = 500,
+        x2 = 500,
+        y, y1 = 500,
+        y2 = 500,
+        k, w, h, l;
+      k = fsw.charAt(0);
+      var bbox = this.bbox(fsw);
+      bbox = bbox.split(' ');
+      x1 = parseInt(bbox[0]);
+      x2 = parseInt(bbox[1]);
+      y1 = parseInt(bbox[2]);
+      y2 = parseInt(bbox[3]);
+      if (k == 'S') {
+          if (x1 == 500 && y1 == 500) {
+              var size = keysize.split('x');
+              x2 = 500 + parseInt(size[0]);
+              y2 = 500 + parseInt(size[1]);
+          } else {
+              x2 = 1000 - x1;
+              y2 = 1000 - y1;
+          }
+      }
+      syms = fsw.match(rsym);
+      exsyms = [];
+      for (var i = 0; i < syms.length; i++) {
+          sym = syms[i].slice(0, 6);
+          x = syms[i].slice(6, 9);
+          y = syms[i].slice(10, 13);
+          if (options.F[i + 1]) {
+              if (options.F[i + 1][1]) {
+                  x = parseInt(x) + parseInt(options.F[i + 1][1].slice(0, 3)) - 500;
+                  y = parseInt(y) + parseInt(options.F[i + 1][1].slice(4, 7)) - 500;
+                  x1 = Math.min(x1, x);
+                  y1 = Math.min(y1, y);
+              }
+              var keysized = this.size(sym);
+              if (keysized) {
+                  keysized = keysized.split('x');
+                 
+                  x2 = Math.max(x2, parseInt(x) + (options.F[i + 1][0] * parseInt(keysized[0])));
+                  y2 = Math.max(y2, parseInt(y) + (options.F[i + 1][0] * parseInt(keysized[1])));
+              }
+
+          }
+          exsym = new Object;
+          exsym.x = parseInt(x);
+          exsym.y = parseInt(y);
+          var keysized1 = this.size(sym);
+
+          keysized1 = keysized1.split('x');
+          exsym.width = parseInt(keysized1[0]);
+          exsym.height = parseInt(keysized1[1]);
+
+          gelem = '<g transform="translate(' + x + ',' + y + ')">';
+          gelem += '<text ';
+          gelem += 'class="sym-fill" ';
+          if (!options.css) {
+              exsym.fontsize = (options.F[i + 1] ? 30 * options.F[i + 1][0] : 30);
+              exsym.nwcolor = (options.E[i + 1] ? options.E[i + 1][1] ? options.E[i + 1][1] : options.fill : options.fill);
+
+              gelem += 'style="pointer-events:none;font-family:\'SignWriting 2010 Filling\';font-size:' + (options.F[i + 1] ? 30 * options.F[i + 1][0] : 30) + 'px;fill:' + (options.E[i + 1] ? options.E[i + 1][1] ? options.E[i + 1][1] : options.fill : options.fill) + ';';
+              gelem += options.view == 'code' ? '' : '-webkit-font-feature-settings:\'liga\';font-feature-settings:\'liga\';';
+              gelem += '"';
+              //-moz-font-feature-settings:'liga';
+          }
+          gelem += '>';
+          exsym.size = options.F[i + 1] ? options.F[i + 1][0] : 1;
+          exsym.pua = this.pua(sym);
+          exsym.code = this.code(sym).codePointAt();
+          exsym.key = sym;
+          gelem += options.view == "key" ? sym : options.view == "uni8" ? this.uni8(sym) : options.view == "pua" ? this.pua(sym) : this.code(sym);
+          gelem += '</text>';
+          gelem += '<text ';
+          gelem += 'class="sym-line" ';
+          if (!options.css) {
+              gelem += 'style="';
+              gelem += options.view == options.copy ? '' : 'pointer-events:none;';
+              exsym.nbcolor = (options.E[i + 1] ? options.E[i + 1][0] : options.colorize ? '#' + colorize(sym) : options.line);
+              gelem += 'font-family:\'SignWriting 2010\';font-size:' + (options.F[i + 1] ? 30 * options.F[i + 1][0] : 30) + 'px;fill:' + (options.E[i + 1] ? options.E[i + 1][0] : options.colorize ? '#' + this.colorize(sym) : options.line) + ';';
+              gelem += options.view == 'code' ? '' : '-webkit-font-feature-settings:\'liga\';font-feature-settings:\'liga\';';
+              gelem += '"';
+          }
+          gelem += '>';
+          gelem += options.view == "key" ? sym : options.view == "uni8" ? this.uni8(sym) : options.view == "pua" ? this.pua(sym) : this.code(sym);
+          gelem += '</text>';
+          gelem += '</g>';
+          syms[i] = gelem;
+          exsyms[i] = exsym;
+      }
+
+      x1 = x1 - options.pad;
+      x2 = x2 + options.pad;
+      y1 = y1 - options.pad;
+      y2 = y2 + options.pad;
+      w = x2 - x1;
+      h = y2 - y1;
+      l = o[k] || 0;
+      l = l * 75 + x1 - 400;
+      var exsign = new Object;
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" ';
+      if (options.class) {
+          svg += 'class="' + options.class + '" ';
+          exsign.class = options.classname;
+      }
+      if (options.size != 'x') svg += 'width="' + (w * options.size) + '" height="' + (h * options.size) + '" ';
+      exsign.width = (w * options.size);
+      exsign.height = (h * options.size);
+      svg += 'viewBox="' + x1 + ' ' + y1 + ' ' + w + ' ' + h + '">';
+      exsign.text = text;
+      if (options.view != options.copy) {
+          svg += '<text style="font-size:0%;">';
+          svg += options.copy == "code" ? this.code(text) : options.copy == "uni8" ? this.uni8(text) : options.copy == "pua" ? this.pua(text) : text;
+          svg += '</text>';
+      }
+      if (options.back) {
+          svg += '  <rect x="' + x1 + '" y="' + y1 + '" width="' + w + '" height="' + h + '" style="fill:' + options.back + ';" />';
+      }
+      exsign.x = x1;
+      exsign.y = y1;
+      exsign.width = w;
+      exsign.height = h;
+      exsign.backfill = options.back;
+      svg += syms.join('') + "</svg>";
+      exsign.syms = exsyms;
+      if (options.laned) {
+          svg = '<div style="padding:10px;position:relative;width:' + w + 'px;height:' + h + 'px;left:' + l + 'px;">' + svg + '</div>';
+      }
+      exsign.laned = options.laned ? true : false;
+      exsign.left = l;
+      return exsign;
+  },
+  canvas: function (text, options) {
     var canvas = document.createElement("canvas");
     var fsw = this.fsw(text,true);
     var styling = this.styling(text);

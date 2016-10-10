@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -394,6 +394,15 @@ function fswChange(){
 	  document.getElementById("sfswsvgRow").className = "warning";
 	}
 
+	var sfswsymbolsListOut = sw10.symbolsList(fswIn);
+	document.getElementById("sfswsvgFn").innerHTML = 'sw10.symbolsList("' + fswIn + '");';
+	document.getElementById("sfswsymbolsListOut").innerHTML = JSON.stringify ( sfswsymbolsListOut);
+	if (sfswsymbolsListOut) {
+	    document.getElementById("sfswsymbolsListRow").className = "success";
+	} else {
+	    document.getElementById("sfswsymbolsListRow").className = "warning";
+	}
+
     var fswcanvasOut = sw10.canvas(fswInN);
 	document.getElementById("fswcanvasFn").innerHTML = 'sw10.canvas("' + fswInN + '");';
 	document.getElementById("fswcanvasOut").innerHTML = fswcanvasOut;
@@ -756,10 +765,15 @@ function setText(fsw){
           <td id="fswTFn">sw10.fsw("",true)</td>
           <td id="fswTOut"></td>
         </tr>
-        <tr id="sfswsvgRow">
-          <td id="sfswsvgFn">sw10.svg("")</td>
-          <td id="sfswsvgOut"></td>
-        </tr>
+          <tr id="sfswsvgRow">
+              <td id="sfswsvgFn">sw10.svg("")</td>
+              <td id="sfswsvgOut"></td>
+          </tr>
+         
+          <tr id="sfswsymbolsListRow">
+              <td id="sfswsymbolsListFn">sw10.symbolsList("")</td>
+              <td id="sfswsymbolsListOut"></td>
+          </tr>
         <tr id="sfswpngRow">
           <td id="sfswpngFn">sw10.png("")</td>
           <td id="sfswpngOut"></td>
