@@ -1,7 +1,7 @@
 ## The SignWriting 2010 JavaScript Library
 - - - 
-> Version 1.6.1  
-August 27th, 2015
+> Version 1.9.1  
+June 29th, 2016
 
 
 SignWriting 2010 is the modern implementation and international specification of the SignWriting script for the internet community that includes TrueType Fonts, CSS Declarations, and a compact JavaScript Library.
@@ -12,7 +12,7 @@ SignWriting 2010 is the modern implementation and international specification of
 The JavaScript library leverages the TrueType fonts without any additional requirements. Include the "sw10.js" script or the minified version "sw10.min.js" in any HTML page to access the function library. 
 
 > SignWriting 2010 JavaScript Library  
-Copyright (c) 2007-2015, Stephen E Slevinski Jr  
+Copyright (c) 2007-2016, Stephen E Slevinski Jr  
 Licensed under the MIT License
 
 - [SignWriting 2010 JavaScript Library](http://slevinski.github.io/sw10js)  
@@ -58,6 +58,12 @@ When the TrueType fonts are installed on a system, the CSS Font-Face declaration
     }
 
 ### Version History
+* 1.9.1 - Jun 29th, 2016: fixed empty signbox array
+* 1.9.0 - Jun 25th, 2016: Added Plane 4 proposal for Unicode 10 as function sw10.uni10
+* 1.8.1 - May 9th, 2016: I-D revision 07
+* 1.8.0 - Mar 2nd, 2016: signtext function, bbox fix, and general nits
+* 1.7.0 - Nov 11th, 2015: styling string, convert flags, and I-D revision 06
+* 1.6.2 - Oct 20th, 2015: zoom level x for expanding SVG and general nits
 * 1.6.1 - Aug 27th, 2015: background hex value fix
 * 1.6.0 - Aug 26th, 2015: added styling string for SVG and PNG
 * 1.5.4 - Aug 11th, 2015: function pua fix for plane 15 as 5-char hex values
