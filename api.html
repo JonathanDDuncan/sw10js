@@ -160,6 +160,15 @@ function keyChange(){
 	  document.getElementById("puaRow").className = "warning";
 	}
 
+    var uni10Out = sw10.uni10(keyIn);
+	document.getElementById("uni10Fn").innerHTML = 'sw10.uni10("' + keyIn + '");';
+	document.getElementById("uni10Out").innerHTML = uni10Out;
+	if (uni10Out) {
+	  document.getElementById("uni10Row").className = "success";
+	} else {
+	  document.getElementById("uni10Row").className = "warning";
+	}
+
 	var isOut = sw10.is(keyIn);
 	document.getElementById("isFn").innerHTML = 'sw10.is("' + keyIn + '");';
 	document.getElementById("isOut").innerHTML = isOut;
@@ -430,8 +439,17 @@ function fswChange(){
 	  document.getElementById("fswpuaRow").className = "warning";
 	}
 
-    var converteOut = sw10.convert(fswIn,'e');
-	document.getElementById("converteFn").innerHTML = 'sw10.convert("' + fswIn + '","e");';
+    var fswuni10Out = sw10.uni10(fswIn);
+	document.getElementById("fswuni10Fn").innerHTML = 'sw10.uni10("' + fswIn + '");';
+	document.getElementById("fswuni10Out").innerHTML = fswuni10Out;
+	if (fswuni10Out) {
+	  document.getElementById("fswuni10Row").className = "success";
+	} else {
+	  document.getElementById("fswuni10Row").className = "warning";
+	}
+
+    var converteOut = sw10.convert(fswIn,'A');
+	document.getElementById("converteFn").innerHTML = 'sw10.convert("' + fswIn + '","A");';
 	document.getElementById("converteOut").innerHTML = converteOut;
 	if (converteOut) {
 	  document.getElementById("converteRow").className = "success";
@@ -439,8 +457,8 @@ function fswChange(){
 	  document.getElementById("converteRow").className = "warning";
 	}
 
-    var convertgOut = sw10.convert(fswIn,'g');
-	document.getElementById("convertgFn").innerHTML = 'sw10.convert("' + fswIn + '","g");';
+    var convertgOut = sw10.convert(fswIn,'a');
+	document.getElementById("convertgFn").innerHTML = 'sw10.convert("' + fswIn + '","a");';
 	document.getElementById("convertgOut").innerHTML = convertgOut;
 	if (convertgOut) {
 	  document.getElementById("convertgRow").className = "success";
@@ -448,8 +466,8 @@ function fswChange(){
 	  document.getElementById("convertgRow").className = "warning";
 	}
 
-    var convertEOut = sw10.convert(fswIn,'E');
-	document.getElementById("convertEFn").innerHTML = 'sw10.convert("' + fswIn + '","E");';
+    var convertEOut = sw10.convert(fswIn,'S');
+	document.getElementById("convertEFn").innerHTML = 'sw10.convert("' + fswIn + '","S");';
 	document.getElementById("convertEOut").innerHTML = convertEOut;
 	if (convertEOut) {
 	  document.getElementById("convertERow").className = "success";
@@ -457,8 +475,8 @@ function fswChange(){
 	  document.getElementById("convertERow").className = "warning";
 	}
 
-    var convertELOut = sw10.convert(fswIn,'EL');
-	document.getElementById("convertELFn").innerHTML = 'sw10.convert("' + fswIn + '","EL");';
+    var convertELOut = sw10.convert(fswIn,'SL');
+	document.getElementById("convertELFn").innerHTML = 'sw10.convert("' + fswIn + '","SL");';
 	document.getElementById("convertELOut").innerHTML = convertELOut;
 	if (convertELOut) {
 	  document.getElementById("convertELRow").className = "success";
@@ -466,8 +484,8 @@ function fswChange(){
 	  document.getElementById("convertELRow").className = "warning";
 	}
 
-    var convertGOut = sw10.convert(fswIn,'G');
-	document.getElementById("convertGFn").innerHTML = 'sw10.convert("' + fswIn + '","G");';
+    var convertGOut = sw10.convert(fswIn,'s');
+	document.getElementById("convertGFn").innerHTML = 'sw10.convert("' + fswIn + '","s");';
 	document.getElementById("convertGOut").innerHTML = convertGOut;
 	if (convertGOut) {
 	  document.getElementById("convertGRow").className = "success";
@@ -475,8 +493,8 @@ function fswChange(){
 	  document.getElementById("convertGRow").className = "warning";
 	}
 
-    var convertGLOut = sw10.convert(fswIn,'GL');
-	document.getElementById("convertGLFn").innerHTML = 'sw10.convert("' + fswIn + '","GL");';
+    var convertGLOut = sw10.convert(fswIn,'sL');
+	document.getElementById("convertGLFn").innerHTML = 'sw10.convert("' + fswIn + '","sL");';
 	document.getElementById("convertGLOut").innerHTML = convertGLOut;
 	if (convertGLOut) {
 	  document.getElementById("convertGLRow").className = "success";
@@ -521,6 +539,16 @@ function queryChange(){
 	} else {
       document.getElementById("resultsOut").innerHTML = '';
 	  document.getElementById("resultsRow").className = "warning";
+	}
+
+    var signtextOut = sw10.signtext(textIn);
+	document.getElementById("signtextFn").innerHTML = 'sw10.signtext("' + textIn + '");';
+	if (signtextOut) {
+      document.getElementById("signtextOut").innerHTML = 'Array("' + signtextOut.join('", "') + '")';
+	  document.getElementById("signtextRow").className = "success";
+	} else {
+      document.getElementById("signtextOut").innerHTML = '';
+	  document.getElementById("signtextRow").className = "warning";
 	}
 
 }
@@ -649,6 +677,10 @@ function setText(fsw){
         <tr id="puaRow">
           <td id="puaFn">sw10.pua("")</td>
           <td id="puaOut"></td>
+        </tr>
+        <tr id="uni10Row">
+          <td id="uni10Fn">sw10.uni10("")</td>
+          <td id="uni10Out"></td>
         </tr>
         <tr id="isRow">
           <td id="isFn">sw10.is("")</td>
@@ -800,28 +832,32 @@ function setText(fsw){
           <td id="fswpuaFn">sw10.pua("")</td>
           <td id="fswpuaOut"></td>
         </tr>
+        <tr id="fswuni10Row">
+          <td id="fswuni10Fn">sw10.uni10("")</td>
+          <td id="fswuni10Out"></td>
+        </tr>
         <tr id="converteRow">
-          <td id="converteFn">sw10.convert("","e")</td>
+          <td id="converteFn">sw10.convert("","A")</td>
           <td id="converteOut"></td>
         </tr>
         <tr id="convertgRow">
-          <td id="convertgFn">sw10.convert("","g")</td>
+          <td id="convertgFn">sw10.convert("","a")</td>
           <td id="convertgOut"></td>
         </tr>
         <tr id="convertERow">
-          <td id="convertEFn">sw10.convert("","E")</td>
+          <td id="convertEFn">sw10.convert("","S")</td>
           <td id="convertEOut"></td>
         </tr>
         <tr id="convertELRow">
-          <td id="convertELFn">sw10.convert("","EL")</td>
+          <td id="convertELFn">sw10.convert("","SL")</td>
           <td id="convertELOut"></td>
         </tr>
         <tr id="convertGRow">
-          <td id="convertGFn">sw10.convert("","G")</td>
+          <td id="convertGFn">sw10.convert("","s")</td>
           <td id="convertGOut"></td>
         </tr>
         <tr id="convertGLRow">
-          <td id="convertGLFn">sw10.convert("","GL")</td>
+          <td id="convertGLFn">sw10.convert("","sL")</td>
           <td id="convertGLOut"></td>
         </tr>
 
@@ -860,6 +896,7 @@ function setText(fsw){
                     <div class="col-sm-9">
                       <button class="btn btn-default" onClick="setText('M518x529S14c20481x471S27106503x489'); queryChange();return false;">Hello</button>
                       <button class="btn btn-default" onClick="setText('M518x533S1870a489x515S18701482x490S20500508x496S2e734500x468'); queryChange();return false;">World</button>
+                      <button class="btn btn-default" onClick="setText('AS14c20S27106M518x529S14c20481x471S27106503x489 AS18701S1870aS2e734S20500M518x533S1870a489x515S18701482x490S20500508x496S2e734500x468 S38800464x496'); queryChange();return false;">Hello world.</button>
                     </div>
                   </div>
                 </form>
@@ -884,6 +921,10 @@ function setText(fsw){
         <tr id="resultsRow">
           <td id="resultsFn">sw10.results("","")</td>
           <td id="resultsOut"></td>
+        </tr>
+        <tr id="signtextRow">
+          <td id="signtextFn">sw10.signtext("","")</td>
+          <td id="signtextOut"></td>
         </tr>
 
       </tbody>

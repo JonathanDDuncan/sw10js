@@ -208,6 +208,29 @@ suite('.pua( )', function(){
   });
 });
 
+// .uni10()
+suite('.uni10( )', function(){
+  suite('Valid Key', function(){
+    test('should return 1 character per key', function(){
+      assert.equal(sw10.uni10("S10000"),'񀀁');
+      assert.equal(sw10.uni10("S38b5f"),'񏒀');
+    });
+  });
+  suite('Valid FSW', function(){
+    test('should return Unicode string with ASCII and plane 4 for symbols', function(){
+      assert.equal(sw10.uni10("M518x529S14c20481x471S27106503x489"),'M518x529񁲡481x471񈩧503x489');
+      assert.equal(sw10.uni10("M518x533S1870a489x515S18701482x490S20500508x496S2e734500x468"),'M518x533񃊫489x515񃊢482x490񆇡508x496񋛕500x468');
+    });
+  });
+  suite('Invalid', function(){
+    test('should return empty string for invalid keys', function(){
+      assert.equal(sw10.uni10("S1000"),'');
+      assert.equal(sw10.uni10("S4005f"),'');
+    });
+  });
+});
+
+
 // .bbox()
 suite('.bbox( )', function(){
   suite('Valid FSW', function(){
@@ -218,7 +241,7 @@ suite('.bbox( )', function(){
   });
   suite('Valid Coordinates', function(){
     test('should return x-min x-max y-min y-max', function(){
-      assert.equal(sw10.bbox("550x550"),'550 550 550 550');
+      assert.equal(sw10.bbox("450x450"),'450 550 450 550');
       assert.equal(sw10.bbox("440x660 550x330"),'440 550 330 660');
     });
   });
@@ -423,14 +446,14 @@ suite('.lines( )', function(){
 suite('.convert( )', function(){
   suite('convert', function(){
     test('should return query string from FSW', function(){
-      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'e'),'QAS2ff00S14c20T');
-      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'g'),'QAS2ffuuS14cuuT');
-      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'E'),'QS2ff00S14c20S22b03S14c10S20500');
-      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'G'),'QS2ffuuS14cuuS22buuS14cuuS205uu');
-      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'EL'),'QS2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537');
-      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'GL'),'QS2ffuu482x483S14cuu514x470S22buu505x507S14cuu476x524S205uu501x537');
-      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'eEL'),'QAS2ff00S14c20TS2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537');
-      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'gGL'),'QAS2ffuuS14cuuTS2ffuu482x483S14cuu514x470S22buu505x507S14cuu476x524S205uu501x537');
+      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'A'),'QAS2ff00S14c20T');
+      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'a'),'QAS2ffuuS14cuuT');
+      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'S'),'QS2ff00S14c20S22b03S14c10S20500');
+      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'s'),'QS2ffuuS14cuuS22buuS14cuuS205uu');
+      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'SL'),'QS2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537');
+      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'sL'),'QS2ffuu482x483S14cuu514x470S22buu505x507S14cuu476x524S205uu501x537');
+      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'ASL'),'QAS2ff00S14c20TS2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537');
+      assert.equal(sw10.convert("AS2ff00S14c20M537x555S2ff00482x483S14c20514x470S22b03505x507S14c10476x524S20500501x537",'asL'),'QAS2ffuuS14cuuTS2ffuu482x483S14cuu514x470S22buu505x507S14cuu476x524S205uu501x537');
     });
   });
   suite('Invalid FSW', function(){
@@ -448,3 +471,13 @@ suite('.convert( )', function(){
     });
   });
 });
+
+// .signtext()
+suite('.signtext( )', function(){
+  suite('signtext', function(){
+    test('should return array of signs and punctuations in order', function(){
+      assert.deepEqual(sw10.signtext("AS14c20S27106M518x529S14c20481x471S27106503x489 AS18701S1870aS2e734S20500M518x533S1870a489x515S18701482x490S20500508x496S2e734500x468 S38800464x496"),['AS14c20S27106M518x529S14c20481x471S27106503x489','AS18701S1870aS2e734S20500M518x533S1870a489x515S18701482x490S20500508x496S2e734500x468','S38800464x496']);
+    });
+  });
+});
+
